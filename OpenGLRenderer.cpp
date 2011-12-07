@@ -60,7 +60,7 @@ void OpenGLRenderer::setPerspective(float fovy, float aspect, float zNear, float
 {
 	float xmin, xmax, ymin, ymax;
 
-	ymax = zNear * ZMath::tan(fovy * Math::PI / 360.0f);
+	ymax = zNear * ZMath::tan(fovy * ZMath::PI / 360.0f);
 	ymin = -ymax;
 	xmin = ymin * aspect;
 	xmax = ymax * aspect;

@@ -26,11 +26,11 @@ public:
 
 	// Access operators
 	float& operator () (int row, int col);
-	const float operator () (int row, int col) const;
+	float operator () (int row, int col) const;
 
 	// Index operators
 	float& operator [] (int i);
-	const float operator [] (int i) const;
+	float operator [] (int i) const;
 
 	// Assignation operators
 	const Matrix4& operator += (const Matrix4 &matrix);
@@ -148,7 +148,7 @@ inline float& Matrix4::operator () (int row, int col)
 	return m[col*4+row];
 }
 
-inline const float Matrix4::operator () (int row, int col) const
+inline float Matrix4::operator () (int row, int col) const
 {
 	assert(row>=0 && row<4);
 	assert(col>=0 && col<4);
@@ -161,7 +161,7 @@ inline float& Matrix4::operator [] (int i)
 	return m[i];
 }
 
-inline const float Matrix4::operator [] (int i) const
+inline float Matrix4::operator [] (int i) const
 {
 	assert(i>=0 && i<16);
 	return m[i];

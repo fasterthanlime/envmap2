@@ -10,7 +10,7 @@ INCLUDES = -I. `sdl-config --cflags`
 LIBS     = -lGL -lGLU -lboost_thread-mt `sdl-config --libs`
 
 # Compiler
-CCC      = gcc
+CCC      = clang
 
 # C++ Compiler flags
 CXXFLAGS = -O2 -W -Wall -pipe
