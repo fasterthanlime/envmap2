@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "Matrix4.cpp"
+#include "Matrix4.h"
 
 Camera::Camera(int w, int h, OpenGLRenderer *r) : screenW(w), screenH(h), renderer(r)
 {	

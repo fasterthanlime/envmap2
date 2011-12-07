@@ -274,4 +274,17 @@ inline Vector3 Matrix4::getTranslation() const
 	return Vector3(m[12], m[13], m[14]);
 }
 
+
+Matrix4 mat4Translation(const Vector3 &v);
+Matrix4 mat4RotationX(float rad);
+Matrix4 mat4RotationY(float rad);
+Matrix4 mat4RotationZ(float rad);
+Matrix4 mat4RotationAxis(const Vector3 &axis, float rad);
+Matrix4 mat4RotationX(float rad, const Vector3& center);
+Matrix4 mat4RotationY(float rad, const Vector3& center);
+Matrix4 mat4RotationZ(float rad, const Vector3& center);
+Matrix4 mat4Frustum(float left, float right, float bottom, float top, float near, float far);
+Matrix4 mat4FrustumInf(float left, float right, float bottom, float top, float near);
+Matrix4 mat4LookAt(const Vector3 &eye, const Vector3 &center, const Vector3 &up);
+
 #endif	// __MATRIX4_H__
