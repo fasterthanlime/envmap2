@@ -130,20 +130,20 @@ void OpenGLShader::loadShaderFromFile(GLhandleARB obj, const std::string &filena
 
 void OpenGLShader::setUniform(const char* str, int i) const
 {
-	glUniform1iARB(glGetUniformLocation(progObj, str), i);
+	glUniform1iARB(glGetUniformLocationARB(progObj, str), i);
 }
 
 void OpenGLShader::setUniform(const char* str, float f) const
 {
-	glUniform1fARB(glGetUniformLocation(progObj, str), f);
+	glUniform1fARB(glGetUniformLocationARB(progObj, str), f);
 }
 
 void OpenGLShader::setUniform(const char* str, const Color &c) const
 {
-	glUniform4fvARB(glGetUniformLocation(progObj, str), 1, (const GLfloat*)&c);
+	glUniform4fvARB(glGetUniformLocationARB(progObj, str), 1, (const GLfloat*)&c);
 }
 
 void OpenGLShader::setUniform(const char* str, const Vector3 &v) const
 {
-	glUniform3fvARB(glGetUniformLocation(progObj, str), 1, (const GLfloat*)&v);
+	glUniform3fvARB(glGetUniformLocationARB(progObj, str), 1, (const GLfloat*)&v);
 }
