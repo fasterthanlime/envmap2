@@ -103,7 +103,7 @@ void Camera::recalculateProjMatrix()
 {
 	// Perspective projection
 	float aspect = (float)screenW / screenH;
-	float ymax = zNear * ZMath::tan(ZMath::deg2rad(fovy) * 0.5f);
+	float ymax = zNear * ZMath::tan(Math::deg2rad(fovy) * 0.5f);
 	float ymin = -ymax;
 	float xmin = ymin * aspect;
 	float xmax = ymax * aspect;
