@@ -27,7 +27,7 @@ void main()
 	// Real fresnel equation
 	refFactor = (etaRatio * cosThetaI - sqrt(1 - (1 - cosThetaI * cosThetaI)*etaRatio*etaRatio));
 	refFactor = refFactor/(etaRatio * cosThetaI + sqrt(1 - (1 - cosThetaI * cosThetaI)*etaRatio*etaRatio));
-	redFactor = refFactor * refFactor;
+	refFactor = refFactor * refFactor;
 
 	// Transform vertex
 	gl_TexCoord[0] = gl_MultiTexCoord0;
