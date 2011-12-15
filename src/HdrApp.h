@@ -15,6 +15,7 @@ private:
 	void loadResources();
 	void loadOpenGLResources();
 	void update(float dt);
+        void computeLuminosity();
 	void render();
 	void renderLoadingScreen();
 	void resize(int w, int h);
