@@ -1,4 +1,4 @@
+media
+bin/*
+src/objs/*
 *.o
-IN55_HDR_demo
-log
-data
