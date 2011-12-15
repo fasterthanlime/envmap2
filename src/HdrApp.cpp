@@ -34,7 +34,7 @@ HdrApp::HdrApp()
 	fileShaderEffect.push_back("reflectTex");
 	fileShaderEffect.push_back("refract");
 	fileShaderEffect.push_back("fresnel");
-	fileShaderEffect.push_back("fresnelComplex");
+	// fileShaderEffect.push_back("fresnelComplex");
 	fileShaderEffect.push_back("chromaticDispersion");
 	shaderEffect.resize(fileShaderEffect.size());
 	resetEffect();
@@ -48,7 +48,7 @@ HdrApp::~HdrApp()
 void HdrApp::init(int w, int h)
 {
 	// Set title
-	setTitle("2006 - UTBM - IN55 - High Dynamic Range in OpenGL - Fabien Houlmann and Stephane Metz");
+	setTitle("2011 - EPFL - Fresnel and environment mapping - Oana Balmau, Amos Wenger, Igor Zablotchi");
 
 	// Create the camera
 	cam = new Camera(screenW = w, screenH = h, getRenderer());
@@ -99,6 +99,10 @@ void HdrApp::loadOpenGLResources()
 	cubeMapHdr.load(fileCubeMap.at(currentCubeMap), GL_RGBA16F_ARB);
 	cubeMapRgb.load(fileCubeMap.at(currentCubeMap), GL_RGBA);
 
+        // Create luminosity texture
+        rtLum = new OpenGLFBO();
+        rtLum->init(w, h, GL_RGBA);
+
 	// Create render texture HDR
 	rtHdr = new OpenGLFBO();
 	rtHdr->init(w, h, GL_RGBA16F_ARB);
@@ -127,9 +131,13 @@ void HdrApp::loadOpenGLResources()
 		shaderEffect.at(i).load(base+".vp", base+".fp");
 	}
 
-	// Create the down sampler
+	// Create the down sampler for HDR
 	downSampler = new DownSampler();
 	downSampler->init(w, h, GL_RGBA16F_ARB);
+
+	// Create the down sampler for luminosity computation
+	downSamplerLum = new DownSampler();
+	downSamplerLum->init(w, h, GL_RGBA);
 }
 
 void HdrApp::update(float dt)
@@ -309,8 +317,8 @@ void HdrApp::renderHdr()
 		shaderBloom.end();
 	rtBloom->endCapture();
 
-	// Downsampled 4 times to blur
-	downSampler->update(rtBloom, &shaderBlur, 4);
+	// Downsample down to 1x1
+	downSampler->update(rtBloom, &shaderBlur, 0);
 
 	// Add the four blurred render texture with additive blending
 	glEnable(GL_BLEND);

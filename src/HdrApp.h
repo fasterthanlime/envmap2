@@ -58,7 +58,7 @@ private:
 	int currentMesh;
 
 	// Render Texture
-	OpenGLFBO *rtHdr, *rtRgb, *rtBloom;
+	OpenGLFBO *rtHdr, *rtRgb, *rtBloom, *rtLum;
 
 	// Cube map in HDR and LDR
 	OpenGLTextureCube cubeMapHdr, cubeMapRgb;
@@ -87,7 +87,7 @@ private:
 	Vector3 etaRatio;
 
 	// Down sampler
-	DownSampler *downSampler;
+	DownSampler *downSampler, *downSamplerLum;
 
 	// Font to render text
 	OpenGLFont font;
