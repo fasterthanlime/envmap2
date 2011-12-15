@@ -1,7 +1,7 @@
 # Source files
 SRC      = Camera.cpp Color.cpp HdrApp.cpp Image.cpp ImageManager.cpp main.cpp ZMath.cpp Matrix4.cpp MemoryManager.cpp OpenGLApp.cpp OpenGLFBO.cpp OpenGLRenderer.cpp OpenGLShader.cpp OpenGLTextureCube.cpp TriMesh.cpp TriMeshManager.cpp Vector3.cpp File.cpp DownSampler.cpp OpenGLFont.cpp OpenGLTexture2D.cpp
-OBJ      = $(SRC:.cpp=.o)
-OUT      = IN55_HDR_demo
+OBJ      = $(SRC:%.cpp=objs/%.o)
+OUT      = ../bin/envmap2
 
 # Include
 INCLUDES = -I. `sdl-config --cflags`
@@ -20,20 +20,23 @@ CXXFLAGS = -O0 -g -W -Wall -pipe
 
 .SUFFIXES: .cpp
 
-default: $(OUT)
+default: prepare $(OUT)
 
-.cpp.o:
+prepare:
+	mkdir -p objs/ ../bin/
+
+$(OBJ): objs/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-GLee.o:
-	$(CCC) $(CXXFLAGS) $(INCLUDES) -c GLee.c -o GLee.o
+objs/GLee.o:
+	$(CCC) $(CXXFLAGS) $(INCLUDES) -c GLee.c -o objs/GLee.o
 
-rgbe.c:
-	$(CCC) $(CXXFLAGS) $(INCLUDES) -c rgbe.c -o rgbe.o
+objs/rgbe.o:
+	$(CCC) $(CXXFLAGS) $(INCLUDES) -c rgbe.c -o objs/rgbe.o
 
-$(OUT): $(OBJ) GLee.o rgbe.o
-	$(CXX) $(OBJ) GLee.o rgbe.o -o $(OUT) $(LIBS)
+$(OUT): $(OBJ) objs/GLee.o objs/rgbe.o
+	$(CXX) $(OBJ) objs/GLee.o objs/rgbe.o -o $(OUT) $(LIBS)
 
 clean:
-	rm -f $(OBJ) GLee.o rgbe.o $(OUT)
+	rm -f objs/*.o $(OUT)
 

@@ -360,7 +360,7 @@ void HdrApp::renderHdr()
 
 void HdrApp::renderRgb()
 {
-	// Render the skybow and the mesh
+	// Render the skybox and the mesh
 	rtRgb->beginCapture();
 		getRenderer()->clearBuffer();
 		cam->useLeft();
@@ -373,7 +373,8 @@ void HdrApp::renderText()
 {
 	// General informations
 	Color c = Color::WHITE;
-	font.addText(2, screenH-20, c, "OpenGL High Dynamic Range demo");
+	font.addText(2, screenH-20, c, "Fresnel + environment mapping demo");
+	font.addText(2, screenH-50, c, "Oana Balmau, Amos Wenger, Igor Zablotchi");
 	font.addText(screenW-120, screenH-20, c, "Fps: %.1f", getAvgFps());
 
 	// Selection informations
@@ -484,8 +485,9 @@ void HdrApp::release()
 	shaderTone.release();
 
 	// Release effect shaders
-	for (size_t i=0 ; i<shaderEffect.size() ; ++i)
-		shaderEffect.at(i).release();
+	for (size_t i=0 ; i<shaderEffect.size() ; ++i) {
+              shaderEffect.at(i).release();
+        }
 
 	// Release and delete all render textures
 	rtRgb->release();

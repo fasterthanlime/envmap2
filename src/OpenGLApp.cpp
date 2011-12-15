@@ -9,7 +9,9 @@ void loadThread()
 	{
 		g_app->loadResources();
 	}
-	catch (const std::exception&) {}
+	catch (const std::exception &e) {
+                std::cerr << "Exception caught: " << e.what() << std::endl;
+        }
 	g_app->loading = false;
 }
 
@@ -20,7 +22,9 @@ OpenGLApp::OpenGLApp()
 
 OpenGLApp::~OpenGLApp()
 {
-	delete renderer;
+        if (renderer) {
+          delete renderer;
+        }
 }
 
 void OpenGLApp::run(int w, int h)
