@@ -22,11 +22,11 @@ void main()
 	
 
 	// Compute cos(incident angle) for the fresnel equations
-	float cosThetaI = dot(I,N);
+	float cosThetaI = dot(-I,N);
 	
 	// Real fresnel equation
-	refFactor = (etaRatio * sqrt(1 - (1 - cosThetaI * cosThetaI)*etaRatio*etaRatio) - cosThetaI);
-	refFactor = refFactor/ (etaRatio * sqrt(1 - (1 - cosThetaI * cosThetaI)*etaRatio*etaRatio) + cosThetaI);
+	refFactor = (etaRatio * cosThetaI - sqrt(1.0 - (1.0 - cosThetaI * cosThetaI)*etaRatio*etaRatio));
+	refFactor = refFactor/(etaRatio * cosThetaI + sqrt(1.0 - (1.0 - cosThetaI * cosThetaI)*etaRatio*etaRatio));
 	refFactor = refFactor * refFactor;
 
 	// Transform vertex
