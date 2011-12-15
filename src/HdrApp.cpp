@@ -100,10 +100,6 @@ void HdrApp::loadOpenGLResources()
 	cubeMapHdr.load(fileCubeMap.at(currentCubeMap), GL_RGBA16F_ARB);
 	cubeMapRgb.load(fileCubeMap.at(currentCubeMap), GL_RGBA);
 
-        // Create luminosity texture
-        rtLum = new OpenGLFBO();
-        rtLum->init(w, h, GL_RGBA);
-
 	// Create render texture HDR
 	rtHdr = new OpenGLFBO();
 	rtHdr->init(w, h, GL_RGBA16F_ARB);
@@ -135,10 +131,6 @@ void HdrApp::loadOpenGLResources()
 	// Create the down sampler for HDR
 	downSampler = new DownSampler();
 	downSampler->init(w, h, GL_RGBA16F_ARB);
-
-	// Create the down sampler for luminosity computation
-	downSamplerLum = new DownSampler();
-	downSamplerLum->init(w, h, GL_RGBA);
 }
 
 void HdrApp::update(float dt)
@@ -288,8 +280,33 @@ void HdrApp::render()
 	cam->initQuad(w, h);
 	cam->drawQuadRight();
 
+        // Compute mean luminosity
+        computeLuminosity();
+
 	// Draw text
 	renderText();
+}
+
+void HdrApp::computeLuminosity()
+{
+        int w = screenW;
+        int h = screenH;
+
+        int halfWidth = w / 2;
+        double luminosity = 0.0;
+        double num_pixels = (double) (halfWidth * h / 16);
+        double factor = 1.0 / 255.0 / 3.0 / num_pixels;
+
+        uint8_t data[4 * halfWidth * h];
+        glReadPixels(w / 2, 0, halfWidth, h, GL_BGRA, GL_UNSIGNED_BYTE, (void*) data);
+        for (int y = 0; y < h; y += 4) for (int x = 0; x < halfWidth; x += 4) {
+          int offset = (x * halfWidth + y) * 4;
+          double r = data[offset + 0];
+          double g = data[offset + 1];
+          double b = data[offset + 2];
+          luminosity += (r + g + b) * factor;
+        }
+        std::cout << "luminosity = " << luminosity << std::endl;
 }
 
 void HdrApp::renderHdr()
@@ -318,8 +335,8 @@ void HdrApp::renderHdr()
 		shaderBloom.end();
 	rtBloom->endCapture();
 
-	// Downsample down to 1x1
-	downSampler->update(rtBloom, &shaderBlur, 0);
+	// Downsample four times
+	downSampler->update(rtBloom, &shaderBlur, 4);
 
 	// Add the four blurred render texture with additive blending
 	glEnable(GL_BLEND);
