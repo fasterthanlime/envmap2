@@ -81,7 +81,7 @@ private:
 	// Effect parameters
 	float fresnelBias, fresnelScale, fresnelPower;
 	float reflectionFactor, refractionFactor;
-	float exposure, exposureControl;
+	float exposure, exposureControl, luminosity;
 	float bloomFactor;
 	float brightThreshold;
 	Color matColor;

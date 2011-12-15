@@ -1,6 +1,7 @@
 #include "HdrApp.h"
 #include "SDLException.h"
 #include "AllocOverLoaderOn.h"
+#include <cstdio>
 
 HdrApp::HdrApp()
 {
@@ -47,8 +48,6 @@ HdrApp::~HdrApp()
 
 void HdrApp::init(int w, int h)
 {
-	// Set title
-	setTitle("2011 - EPFL - Fresnel and environment mapping - Oana Balmau, Amos Wenger, Igor Zablotchi");
 
 	// Create the camera
 	cam = new Camera(screenW = w, screenH = h, getRenderer());
@@ -184,8 +183,6 @@ void HdrApp::update(float dt)
 	// Change cube map
 	if (keyIncControlDecLoop(SDLK_c, currentCubeMap, (int)fileCubeMap.size()))
 	{
-                std::cout << "Switched to scene " << fileCubeMap.at(currentCubeMap) << std::endl;
-
 		cubeMapHdr.release();
 		cubeMapHdr.load(fileCubeMap.at(currentCubeMap), GL_RGBA16F_ARB);
 
@@ -284,8 +281,16 @@ void HdrApp::render()
         // Compute mean luminosity
         computeLuminosity();
 
-	// Draw text
-	// renderText();
+	// Update title
+        const char *effect = fileShaderEffect.at(currentEffect).c_str();
+        const char *scene = fileCubeMap.at(currentCubeMap).c_str();
+
+        const char *fmt = "%s on %s | luminosity %.2f | exposure %.2f | eta ratio %.2f)";
+        size_t size = snprintf(NULL, 0, fmt, effect, scene, luminosity, exposure, etaRatio.x);
+        char *str = (char *) malloc(size);
+        snprintf(str, size, fmt, effect, scene, luminosity, exposure, etaRatio.x);
+        setTitle(str);
+        free(str);
 }
 
 void HdrApp::computeLuminosity()
@@ -295,7 +300,7 @@ void HdrApp::computeLuminosity()
 
         int leftWidth = w * mid;
         int sampleWidth = w - leftWidth;
-        float luminosity = 0.0;
+        luminosity = 0.0;
         float num_pixels = (float) (sampleWidth * h / 16);
         float factor = 1.0 / 255.0 / 3.0 / num_pixels;
 
@@ -308,7 +313,6 @@ void HdrApp::computeLuminosity()
           uint8_t b = data[offset + 2];
           luminosity += (r + g + b) * factor;
         }
-        // std::cout << "luminosity = " << luminosity << std::endl;
 
         double luminosityTarget = 0.4;
         double exposureTarget = exposureControl += 0.1 * (luminosityTarget - luminosity);
