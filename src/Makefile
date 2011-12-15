@@ -15,8 +15,8 @@ CCC      = clang
 CXX      = clang++
 
 # C++ Compiler flags
-# CXXFLAGS = -O2 -W -Wall -pipe
-CXXFLAGS = -O0 -g -W -Wall -pipe
+CXXFLAGS = -Os -fomit-frame-pointer -W -Wall -Wextra -pipe
+# CXXFLAGS = -O0 -g -W -Wall -Wextra -pipe
 
 .SUFFIXES: .cpp
 

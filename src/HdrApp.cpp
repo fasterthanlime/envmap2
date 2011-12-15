@@ -5,7 +5,6 @@
 HdrApp::HdrApp()
 {
 	// Path to cube maps
-	fileCubeMap.push_back("uffizi_cross.hdr");
 	fileCubeMap.push_back("building_cross.hdr");
 	fileCubeMap.push_back("stpeters_cross.hdr");
 	fileCubeMap.push_back("campus_cross.hdr");
@@ -43,7 +42,7 @@ HdrApp::HdrApp()
 
 HdrApp::~HdrApp()
 {
-	delete cam;
+
 }
 
 void HdrApp::init(int w, int h)
@@ -62,7 +61,7 @@ void HdrApp::init(int w, int h)
 	font.init(w, h);
 
 	// Mid point
-	cam->setMid(mid = 0.5f);
+	cam->setMid(mid = 0.0f);
 }
 
 void HdrApp::loadResources()
@@ -185,6 +184,8 @@ void HdrApp::update(float dt)
 	// Change cube map
 	if (keyIncControlDecLoop(SDLK_c, currentCubeMap, (int)fileCubeMap.size()))
 	{
+                std::cout << "Switched to scene " << fileCubeMap.at(currentCubeMap) << std::endl;
+
 		cubeMapHdr.release();
 		cubeMapHdr.load(fileCubeMap.at(currentCubeMap), GL_RGBA16F_ARB);
 
@@ -284,7 +285,7 @@ void HdrApp::render()
         computeLuminosity();
 
 	// Draw text
-	renderText();
+	// renderText();
 }
 
 void HdrApp::computeLuminosity()
@@ -292,21 +293,26 @@ void HdrApp::computeLuminosity()
         int w = screenW;
         int h = screenH;
 
-        int halfWidth = w / 2;
-        double luminosity = 0.0;
-        double num_pixels = (double) (halfWidth * h / 16);
-        double factor = 1.0 / 255.0 / 3.0 / num_pixels;
+        int leftWidth = w * mid;
+        int sampleWidth = w - leftWidth;
+        float luminosity = 0.0;
+        float num_pixels = (float) (sampleWidth * h / 16);
+        float factor = 1.0 / 255.0 / 3.0 / num_pixels;
 
-        uint8_t data[4 * halfWidth * h];
-        glReadPixels(w / 2, 0, halfWidth, h, GL_BGRA, GL_UNSIGNED_BYTE, (void*) data);
-        for (int y = 0; y < h; y += 4) for (int x = 0; x < halfWidth; x += 4) {
-          int offset = (x * halfWidth + y) * 4;
-          double r = data[offset + 0];
-          double g = data[offset + 1];
-          double b = data[offset + 2];
+        uint8_t data[4 * sampleWidth * h];
+        glReadPixels(leftWidth, 0, sampleWidth, h, GL_BGRA, GL_UNSIGNED_BYTE, (void*) data);
+        for (int y = 0; y < h; y += 4) for (int x = 0; x < sampleWidth; x += 4) {
+          int offset = (y * sampleWidth + x) * 4;
+          uint8_t r = data[offset + 0];
+          uint8_t g = data[offset + 1];
+          uint8_t b = data[offset + 2];
           luminosity += (r + g + b) * factor;
         }
-        std::cout << "luminosity = " << luminosity << std::endl;
+        // std::cout << "luminosity = " << luminosity << std::endl;
+
+        double luminosityTarget = 0.4;
+        double exposureTarget = exposureControl += 0.1 * (luminosityTarget - luminosity);
+        exposureControl = exposureControl * 0.1 + exposureTarget * 0.9;
 }
 
 void HdrApp::renderHdr()
@@ -464,11 +470,6 @@ void HdrApp::renderText()
 		font.addText(2, 142, c, "(r) Reflection factor: %.2f", reflectionFactor);
 	}
 
-	// HDR and LDR
-	c = Color(1.0f, 0.4f, 0.4f);
-	font.addText((int)(mid*screenW), screenH-40, c, "HDR-->");
-	font.addText((int)(mid*screenW)-70, screenH-40, c, "<--LDR");
-
 	font.render();
 }
 
@@ -544,7 +545,7 @@ void HdrApp::resetEffect()
 	refractionFactor = 0.2f;
 	matColor = Color(0.1f, 0.1f, 0.12f);
 	etaRatio = Vector3(0.8f, 0.8f, 0.8f);
-	bloomFactor = 0.5f;
+	bloomFactor = 0.0f;
 	brightThreshold = 1.2f;
 }
 

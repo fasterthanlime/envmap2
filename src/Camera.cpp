@@ -10,7 +10,7 @@ Camera::Camera(int w, int h, OpenGLRenderer *r) : screenW(w), screenH(h), render
 	recalculateProjMatrix();
 
 	// View Matrix
-	rho = 50.0f;
+	rho = 30.0f;
 	theta = 0.0f;
 	phi = 90.0f;
 	recalculateViewMatrix();
