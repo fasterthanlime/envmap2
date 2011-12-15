@@ -34,8 +34,9 @@ HdrApp::HdrApp()
 	fileShaderEffect.push_back("reflectTex");
 	fileShaderEffect.push_back("refract");
 	fileShaderEffect.push_back("fresnel");
-        fileShaderEffect.push_back("fresnelComplexP");
-        fileShaderEffect.push_back("fresnelComplexS");
+    fileShaderEffect.push_back("fresnelComplexP");
+    fileShaderEffect.push_back("fresnelComplexS");
+    fileShaderEffect.push_back("fresnelComplexSP");
 	fileShaderEffect.push_back("chromaticDispersion");
 	shaderEffect.resize(fileShaderEffect.size());
 	resetEffect();
@@ -431,7 +432,7 @@ void HdrApp::renderText()
 	font.addText(2, 122, c, "(e) Exposure: %.2f", exposure);
 
 	// Fresnel parameters
-	if (currentEffect == 3 || currentEffect == 6)
+	if (currentEffect == 3 || currentEffect == 7)
 	{
 		c = Color(0.6f, 0.6f, 0.8f);
 		font.addText(screenW-190, 62, c, "Fresnel effect:");
@@ -451,14 +452,14 @@ void HdrApp::renderText()
 	}
 
 	// eta ratio
-	if (currentEffect >= 2 && currentEffect <= 5 )
+	if (currentEffect >= 2 && currentEffect <= 6 )
 	{
 		c = Color(0.6f, 0.6f, 0.8f);
 		font.addText(2, 142, c, "(a) eta ratio: %.2f", etaRatio.x);
 	}
 
 	// eta ratio : rgb
-	if (currentEffect == 6)
+	if (currentEffect == 7)
 	{
 		c = Color(0.6f, 0.6f, 0.8f);
 		font.addText(screenW-360, 62, c, "(a) eta ratio:");

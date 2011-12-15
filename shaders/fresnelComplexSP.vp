@@ -1,5 +1,3 @@
-
-
 // Position of the view eye in world space
 uniform vec3 eyePos;
 
@@ -29,9 +27,19 @@ void main()
 	// Real fresnel equation
 	float squareRoot = 1.0 - (1.0 - cosThetaI * cosThetaI)*etaRatio*etaRatio;
 	squareRoot = (squareRoot < 0.0) ? 0.0 : squareRoot;
-	refFactor = (etaRatio * sqrt(squareRoot) - cosThetaI);
-	refFactor = refFactor/(etaRatio * sqrt(squareRoot) + cosThetaI);	
-	refFactor = refFactor * refFactor;
+	
+	float RS;
+	RS = etaRatio * cosThetaI - sqrt(squareRoot);
+	RS = RS/(etaRatio * cosThetaI + sqrt(squareRoot));
+	RS = RS * RS;
+	
+	float RP;
+	RP = (etaRatio * sqrt(squareRoot) - cosThetaI);
+	RP = RP/(etaRatio * sqrt(squareRoot) + cosThetaI);	
+	RP = RP * RP;
+	
+	refFactor = (RS + RP)/2.0;
+	
 
 	// Transform vertex
 	gl_TexCoord[0] = gl_MultiTexCoord0;
