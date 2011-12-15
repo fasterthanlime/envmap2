@@ -2,3 +2,4 @@ media
 bin/*
 src/objs/*
 *.o
+.*.swp
