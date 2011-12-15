@@ -25,9 +25,12 @@ void main()
 	float cosThetaI = dot(-I,N);
 	
 	// Real fresnel equation
-	refFactor = (etaRatio * cosThetaI - sqrt(1.0 - (1.0 - cosThetaI * cosThetaI)*etaRatio*etaRatio));
-	refFactor = refFactor/(etaRatio * cosThetaI + sqrt(1.0 - (1.0 - cosThetaI * cosThetaI)*etaRatio*etaRatio));
+	float squareRoot = 1.0 - (1.0 - cosThetaI * cosThetaI)*etaRatio*etaRatio;
+	squareRoot = (squareRoot < 0.0) ? 0.0 : squareRoot;
+	refFactor = etaRatio * cosThetaI - sqrt(squareRoot);
+	refFactor = refFactor/(etaRatio * cosThetaI + sqrt(squareRoot));
 	refFactor = refFactor * refFactor;
+	
 
 	// Transform vertex
 	gl_TexCoord[0] = gl_MultiTexCoord0;
