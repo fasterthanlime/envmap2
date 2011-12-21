@@ -6,32 +6,27 @@
 HdrApp::HdrApp()
 {
 	// Path to cube maps
-	fileCubeMap.push_back("building_cross.hdr");
-	fileCubeMap.push_back("stpeters_cross.hdr");
+    fileCubeMap.push_back("grace_cross.hdr");
+    fileCubeMap.push_back("house_pano.hdr");
 	fileCubeMap.push_back("campus_cross.hdr");
-	fileCubeMap.push_back("grace_cross.hdr");
-	fileCubeMap.push_back("kitchen_cross.hdr");
-	fileCubeMap.push_back("beach_cross.hdr");
-	fileCubeMap.push_back("galileo_cross.hdr");
-	fileCubeMap.push_back("rnl_cross.hdr");
+    fileCubeMap.push_back("rolex_pano.hdr");
+    fileCubeMap.push_back("calssroom_blurred.hdr");
+    fileCubeMap.push_back("INR_pano.hdr");
+    fileCubeMap.push_back("psihedelic_blur.hdr");
+    fileCubeMap.push_back("sea_pano.hdr");
+	fileCubeMap.push_back("building_cross.hdr");
 	currentCubeMap = 0;
 
 	// Path to mesh
 	fileMesh.push_back("teapot.ms3d");
 	fileMesh.push_back("eye.ms3d");
 	fileMesh.push_back("ming.ms3d");
-	fileMesh.push_back("glass.ms3d");
-	fileMesh.push_back("spoon.ms3d");
-	fileMesh.push_back("car1.ms3d");
 	fileMesh.push_back("pottery.ms3d");
-	fileMesh.push_back("small_glass.ms3d");
-	fileMesh.push_back("car2.ms3d");
 	currentMesh = 0;
 	mesh = TriMeshManager::get()->getTriMesh(fileMesh[currentMesh]);
 
 	// Path to effect shaders
 	fileShaderEffect.push_back("reflect");
-	fileShaderEffect.push_back("reflectTex");
 	fileShaderEffect.push_back("refract");
 	fileShaderEffect.push_back("fresnel");
     fileShaderEffect.push_back("fresnelComplexP");
